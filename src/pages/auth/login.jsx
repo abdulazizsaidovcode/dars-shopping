@@ -23,14 +23,14 @@ function Login() {
                 .then(response => {
                     console.log(response);
                     localStorage.setItem('token', response.data.token);
-                    if (response.data.role == 'ROLE_ADMIN ') {
-                        navigate('/admin');
+                    if (response.data.role == 'ROLE_ADMIN') {
+                        navigate('/admin/products');
                     }
                     else if (response.data.role == 'ROLE_SELLER') {
                         navigate('/seller');
                     }
                     else if (response.data.role == 'ROLE_BUYER') {
-                        navigate('/buyer');
+                        navigate('/customer/products');
                     }
                 }).catch(error => {
                     toast.error(error.response.data.message, 'Error logging in');

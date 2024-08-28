@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
-function AdminHeader() {
+function CustomerHeader() {
     return (
         <div>
             <header>
@@ -22,9 +21,6 @@ function AdminHeader() {
                                     <a href="#" class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" aria-current="page">Dashboard</a>
                                 </li>
                                 <li>
-                                    <Link to={'/admin/users'} class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" aria-current="page">Users</Link>
-                                </li>
-                                <li>
                                     <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Product</a>
                                 </li>
                                 <li>
@@ -43,4 +39,4 @@ function AdminHeader() {
     )
 }
 
-export default AdminHeader
+export default CustomerHeader

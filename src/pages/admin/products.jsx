@@ -3,28 +3,40 @@ import AdminScreen from '.'
 import { apiUrl } from '../../helpers/url'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { config } from '../../helpers/token'
+import { config, imgConfig } from '../../helpers/token'
+import useFetch from '../../hooks/UseFetch'
 
 function AdminProducts() {
     const [products, setProducts] = useState(null)
+    const [img, setImg] = useState(null)
 
-    function fetchProducts() {
-        axios.get(`${apiUrl}product/list`)
-            .then(response => {
-                if (response.data.success) {
-                    setProducts(response.data.body)
-                } else {
-                    setProducts([])
-                }
-            })
-            .catch(error => {
-                toast.error('Failed to fetch products')
-            })
+    const { data, error, loading } = useFetch(`${apiUrl}product/list`)
+
+    if (error) {
+        toast.error('Failed to load products')
+    }
+    function handlechange(e) {
+        setImg(e.target.files[0])
     }
 
-    useEffect(() => {
-        fetchProducts()
-    }, [])
+    function fileUpload() {
+        let formData = new FormData()
+        formData.append('image', img)
+        
+        if (img) {
+            axios.post(`http://161.35.214.247:8090/api/videos/upload`, formData, imgConfig)
+                .then(res => {
+                    toast.success('Image uploaded successfully')
+                }).catch((err) => {
+                    console.log(err);
+
+                })
+        } else {
+            toast.error('Please select an image')
+        }
+
+    }
+
 
     function deleteProduct(productId) {
         if (config && productId) {
@@ -32,7 +44,6 @@ function AdminProducts() {
                 .then(response => {
                     if (response.data.success) {
                         toast.success('Product deleted successfully')
-                        fetchProducts()
                     } else {
                         toast.error('Failed to delete product')
                     }
@@ -46,6 +57,8 @@ function AdminProducts() {
 
     return (
         <AdminScreen title={'Client'}>
+            <button onClick={fileUpload} className='bg-red-400'>upload</button>
+            <input onChange={handlechange} type="file" />
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg h-screen">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -68,7 +81,8 @@ function AdminProducts() {
                         </tr>
                     </thead>
                     <tbody>
-                        {products && products.map((product, key) =>
+                        {loading && <tr><td colSpan="5">Loading...</td></tr>}
+                        {data && data.map((product, key) =>
                             <tr key={key} class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-900 border-b dark:border-gray-700">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {key + 1}
